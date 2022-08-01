@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from worker.models import Address
-from worker.models import Experience, Education, WorkerProfile, LanguageLevel
+from worker.models import Experience, Education, WorkerProfile, LanguageLevel, ProfessionalArea
 
 
 class LanguageLevelSerializer(serializers.ModelSerializer):
@@ -29,17 +29,25 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ['region', 'district']
         depth = 1
 
+
+class WorkingAreaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfessionalArea
+        fields = ['category', 'specialization']
+
+
 class WorkerProfileSerializer(serializers.ModelSerializer):
     education_items = serializers.SerializerMethodField()
     language_items = serializers.SerializerMethodField()
     experience_items = serializers.SerializerMethodField()
     address_items = serializers.SerializerMethodField()
+    workingarea_items = serializers.SerializerMethodField()
 
     class Meta:
         model = WorkerProfile
         fields = ['user', 'gender', 'dob', 'bio', 'image',
-                  'phone', 'email', 'telegram', 'skills', 'specialization', 'education_items',
-                  'language_items', 'experience_items', 'address_items']
+                  'phone', 'email', 'telegram', 'skills', 'education_items',
+                  'language_items', 'experience_items', 'address_items', 'workingarea_items']
 
     def get_education_items(self, obj):
         worker_education_query = Education.objects.filter(
@@ -66,3 +74,9 @@ class WorkerProfileSerializer(serializers.ModelSerializer):
         serializer = AddressSerializer(worker_address_query, many=True)
         return serializer.data
 
+    def get_workingarea_items(self, obj):
+        worker_workingarea_query = ProfessionalArea.objects.filter(
+            user = obj.id
+        )
+        serializer = WorkingAreaSerializer(worker_workingarea_query, many=True)
+        return serializer.data

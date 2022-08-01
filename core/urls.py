@@ -9,7 +9,7 @@ from drf_yasg.views import get_schema_view as swagger_get_schema_view
 
 schema_view = swagger_get_schema_view(
     openapi.Info(
-        title="Posts API",
+        title="Jobhunt API",
         default_version='1.0.0',
         description="API documentation of App",
     ),
@@ -25,3 +25,4 @@ urlpatterns = [
     path('api/v3/', include('post.urls')),
     path('api/v4/', include('common.urls')),
 ]
+
