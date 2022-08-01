@@ -4,10 +4,10 @@ from worker.models import WorkerProfile, LanguageLevel
 
 # Create your views here.
 class WorkerProfileListView(generics.ListCreateAPIView):
-    queryset = WorkerProfile.objects.all().prefetch_related('specialization__category')
+    queryset = WorkerProfile.objects.all()
     serializer_class = WorkerProfileSerializer
 
 
 class WorkerCreateView(generics.CreateAPIView):
-    queryset = WorkerProfile.objects.all().prefetch_related('worker_spec')
+    queryset = WorkerProfile.objects.all()
     serializer_class = WorkerProfileSerializer
